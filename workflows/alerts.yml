@@ -1,0 +1,40 @@
+name: County alerts check
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: county-alerts
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Check sources and post new alerts
+        env:
+          CHART_INCIDENTS_URL: ${{ vars.CHART_INCIDENTS_URL }}
+          CHART_CLOSURES_URL: ${{ vars.CHART_CLOSURES_URL }}
+          DRY_RUN: ${{ vars.DRY_RUN || 'true' }}
+          FB_PAGE_ID: ${{ vars.FB_PAGE_ID }}
+          FB_PAGE_ACCESS_TOKEN: ${{ secrets.FB_PAGE_ACCESS_TOKEN }}
+          NWS_USER_AGENT: ${{ vars.NWS_USER_AGENT }}
+          MAX_POSTS_PER_RUN: '3'
+        run: python bot.py
+      - name: Save deduplication state
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add state.json
+          if ! git diff --staged --quiet; then
+            git commit -m 'Update alert checkpoint [skip ci]'
+            git push
+          fi
