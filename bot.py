@@ -314,9 +314,30 @@ def run():
         state['initialized'] = True
         for key in observed:
             state['seen'][key] = now
+        state['last_mode'] = 'preview' if DRY_RUN else 'live'
         save_state(state)
         LOG.info('Initial baseline created (%d incidents). No historic posts sent.', len(observed))
         return
+    # On the FIRST live run (or whenever switching back from preview mode),
+    # baseline *all currently reported* events rather than publish stale
+    # incidents that were previewed but never marked as posted.
+    # Do not finalize activation while any feed has failed: an older event
+    # could otherwise appear as "new" when that feed recovers.
+    if not DRY_RUN and state.get('last_mode') != 'live':
+        if failures:
+            raise RuntimeError(
+                'Live activation paused: one or more sources failed. '
+                'Keep preview mode enabled and fix the feed first.'
+            )
+        for key in observed:
+            state['seen'][key] = now
+        state['last_mode'] = 'live'
+        save_state(state)
+        LOG.info('Live mode activated. Baseline refreshed (%d current events). '
+                 'No historical alerts were posted.', len(observed))
+        return
+    if DRY_RUN:
+        state['last_mode'] = 'preview'
     outstanding = [event for key, event in observed.items() if key not in state['seen']]
     LOG.info('%d new alerts. Publish mode: %s', len(outstanding), not DRY_RUN)
     if DRY_RUN and not outstanding:
