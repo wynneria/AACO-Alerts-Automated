@@ -267,7 +267,23 @@ def facebook_post(message):
     version = os.getenv('FB_GRAPH_VERSION', 'v27.0')
     response = requests.post(f'https://graph.facebook.com/{version}/{page_id}/feed',
                              data={'message': message, 'access_token': token}, timeout=25)
-    response.raise_for_status()
+    if not response.ok:
+        # A bare HTTP 400 conceals the useful error code supplied by Meta.
+        # Log only documented diagnostic fields, never raw responses or tokens.
+        try:
+            error = response.json().get('error', {})
+        except (ValueError, AttributeError):
+            error = {}
+        if not isinstance(error, dict):
+            error = {}
+        api_code = error.get('code', 'unknown')
+        api_subcode = error.get('error_subcode', 'none')
+        api_message = str(error.get('message') or 'Meta did not provide an error message')
+        api_message = api_message.replace(token, '[REDACTED]')[:500]
+        raise RuntimeError(
+            f'Meta HTTP {response.status_code} | code={api_code} '
+            f'| subcode={api_subcode} | {api_message}'
+        )
     body = response.json()
     if 'id' not in body:
         raise RuntimeError('Meta did not return a post ID')
