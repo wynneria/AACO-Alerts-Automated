@@ -120,7 +120,8 @@
     "chart:incidents:a6009a38af650106006bd32ec4235c0a": "2026-11-25T04:37:58.207801+00:00",
     "chart:closures:2e00da92ac560106006bd32ec4235c0a": "2026-11-25T04:37:58.207801+00:00",
     "chart:closures:6200bae7ac550106006bd32ec4235c0a": "2026-11-25T04:37:58.207801+00:00",
-    "chart:closures:b9ffada62da700da006ad32ec4235c0a": "2026-11-25T05:37:49.042087+00:00"
+    "chart:closures:b9ffada62da700da006ad32ec4235c0a": "2026-11-25T05:37:49.042087+00:00",
+    "chart:incidents:d4ffc3dfbfb30106006bd32ec4235c0a": "2026-11-25T10:18:31.899409+00:00"
   },
   "last_mode": "live"
 }
