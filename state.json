@@ -138,7 +138,9 @@
     "chart:incidents:31014301eb410107006bd32ec4235c0a": "2026-11-25T20:21:04.329744+00:00",
     "nws:https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.960b855f6c9be5c661263eb55897713d2369e29b.003.2": "2026-11-25T20:21:04.329744+00:00",
     "chart:incidents:a000d8b8f25d0107006bd32ec4235c0a": "2026-11-25T22:19:16.159300+00:00",
-    "nws:https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.93af67a6b48400767071393f670a25f948ba8ffc.003.1": "2026-11-25T22:19:16.159300+00:00"
+    "nws:https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.93af67a6b48400767071393f670a25f948ba8ffc.003.1": "2026-11-25T22:19:16.159300+00:00",
+    "nws:https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.d48f29a4fa7b5630f3165279f0c6ecac61ad3571.004.1": "2026-11-26T02:23:49.094016+00:00",
+    "nws:https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.58cd7f7e3ff093fffa4d87f43f7efdcee670c049.004.1": "2026-11-26T02:23:49.094016+00:00"
   },
   "last_mode": "live"
 }
